@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Kiwi Todo",
-    "slug": "kiwiTodo",
+    "slug": "Kiwi Todo App made with React Native",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
