@@ -1,15 +1,18 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native";
 
 const { width, height} = Dimensions.get("window");
+//const { text } = this.props;
 
 class ToDo extends React.Component {
   state = {
     isEditing: false,
-    isComplelted: false
+    isComplelted: false,
+    toDoValue: ""
   };
   render() {
-    const { isCompleted, isEditing } = this.state;
+    const { isCompleted, isEditing, toDoValue } = this.state;
+    const { text } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.column}>
@@ -17,42 +20,55 @@ class ToDo extends React.Component {
             <View
               style={[
                 styles.circle,
-                isCompleted ? styles.completedCircle : styles.uncompletedCircle
+                isCompleted
+                  ? styles.completedCircle
+                  : styles.uncompletedCircle
               ]}
             />
           </TouchableOpacity>
-          <Text
-            style={[
-              styles.text,
-              isCompleted ? styles.completedText : styles.uncompletedText
-            ]}
-          >
-            Hello, I'm a Todo
-          </Text>
-        </View>
           {isEditing ? (
-            <View style={styles.actions}>
-              <TouchableOpacity>
-                <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>✔️</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <TextInput
+              value={toDoValue}
+              style={[styles.input, styles.text]}
+              multiline={true}
+              onChangeText={this._controlInput}
+              returnKeyType={"done"}
+              onBlur={this._finishEditing}
+            />
           ) : (
-            <View style={styles.actions}>
-              <TouchableOpacity>
-                <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>✏️</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <View style={styles.actionContainer}>
-                  <Text style={styles.actionText}>❌</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            <Text
+              style={[
+                styles.text,
+                isCompleted ? styles.completedText : styles.uncompletedText
+              ]}
+            >
+              {text}
+            </Text>
           )}
         </View>
+        {isEditing ? (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._finishEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>✔️</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.actions}>
+            <TouchableOpacity onPressOut={this._startEditing}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>✏️</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>❌</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     );
   }
   _togleComplete = () => {
@@ -62,6 +78,23 @@ class ToDo extends React.Component {
       };
     });
   };
+  _startEditing = () => {
+      const { text } = this.props;
+      this.setState({
+          isEditing: true,
+          toDoValue: text
+      });
+  };
+  _finishEditing = () => {
+      this.setState({
+          isEditing: false
+      });
+  };
+  _controlInput = (text) => {
+      this.setState({
+          toDoValue : text
+      })
+  }
 }
 
 const styles = StyleSheet.create({
@@ -109,7 +142,16 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     actionContainer: {
-        marginRight: 10
+        marginVertical : 10,
+        marginHorizontal: 10
+    },
+    input: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginVertical: 15,
+        width: width /2,
+        paddingBottom: 5,
+        fontSize: 15
     }
 });
 
