@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput } from "react-native";
+import PropTypes from 'prop-types';
 
 const { width, height} = Dimensions.get("window");
 //const { text } = this.props;
 
 class ToDo extends React.Component {
-  state = {
-    isEditing: false,
-    isComplelted: false,
-    toDoValue: ""
-  };
+    constructor(props) {
+        super(props);
+        this.state = {isEditing: false,
+            toDoValue: props.value }
+    }
+    static propTypes = {
+        text: PropTypes.string.isRequired,
+        isCompleted: PropTypes.bool.isRequired,
+        deleteToDo: PropTypes.func.isRequired,
+        id: PropTypes.string.isRequired
+    };
   render() {
     const { isCompleted, isEditing, toDoValue } = this.state;
-    const { text } = this.props;
+    const { text, id, deleteToDo } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.column}>
@@ -61,7 +68,7 @@ class ToDo extends React.Component {
                 <Text style={styles.actionText}>✏️</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPressOut={() => deleteToDo(id)}>
               <View style={styles.actionContainer}>
                 <Text style={styles.actionText}>❌</Text>
               </View>
@@ -79,7 +86,6 @@ class ToDo extends React.Component {
     });
   };
   _startEditing = () => {
-      const { text } = this.props;
       this.setState({
           isEditing: true,
           toDoValue: text
@@ -136,7 +142,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         width: width/2,
-        justifyContent: "space-between"
     },
     actions: {
         flexDirection: "row"
