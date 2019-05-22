@@ -5,10 +5,10 @@ import { View,
     StyleSheet, 
     Dimensions, 
     TextInput } from "react-native";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import PropTypes from 'prop-types';
 
-const { width, height} = Dimensions.get("window");
-//const { text } = this.props;
+const { width } = Dimensions.get("window");
 
 class ToDo extends React.Component {
     state = { isEditing: false };
@@ -37,6 +37,7 @@ class ToDo extends React.Component {
               onChangeText={this._controlInput}
               returnKeyType={"done"}
               onEndEditing={this._finishEditing}
+              on
             />
           ) : (
             <Text
@@ -53,7 +54,7 @@ class ToDo extends React.Component {
           <View style={styles.actions}>
             <TouchableOpacity onPressOut={this._finishEditing}>
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>✔️</Text>
+                <Ionicons name="ios-checkmark" size={32} color="green"/>
               </View>
             </TouchableOpacity>
           </View>
@@ -61,12 +62,12 @@ class ToDo extends React.Component {
           <View style={styles.actions}>
             <TouchableOpacity onPressOut={this._startEditing}>
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>✏️</Text>
+                <Ionicons name="ios-add" size={26} color="blue"/>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPressOut={() => deleteToDo(id)}>
               <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>❌</Text>
+                <Ionicons name="ios-remove" size={26} color="red"/>
               </View>
             </TouchableOpacity>
           </View>
